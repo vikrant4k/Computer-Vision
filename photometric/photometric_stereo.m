@@ -6,7 +6,7 @@ disp('Part 1: Photometric Stereo')
 
 % obtain many images in a fixed view under different illumination
 disp('Loading images...')
-image_dir = 'D:\subj\cv1\Lab1_Photometric_Color\Lab1_Photometric_Color\photometric\photometrics_images\SphereGray5\';   % TODO: get the path of the script
+image_dir = 'D:\subj\cv1\Lab1_Photometric_Color\Lab1_Photometric_Color\photometric\photometrics_images\MonkeyGray\';   % TODO: get the path of the script
 %image_ext = '*.png';
 
 [image_stack, scriptV] = load_syn_images(image_dir);
@@ -15,8 +15,8 @@ fprintf('Finish loading %d images.\n\n', n);
 
 % compute the surface gradient from the stack of imgs and light source mat
 disp('Computing surface albedo and normal map...')
-[albedo, normals] = estimate_alb_nrm(image_stack, scriptV);
-imshow(normals(:,:,:))
+[albedo, normals] = estimate_alb_nrm(image_stack, scriptV,false);
+imshow(albedo)
 %% integrability check: is (dp / dy  -  dq / dx) ^ 2 small everywhere?
 disp('Integrability checking')
 [p, q, SE] = check_integrability(normals);
@@ -47,7 +47,7 @@ show_model(albedo, height_map_2);
 [h, w, n] = size(image_stack);
 fprintf('Finish loading %d images.\n\n', n);
 disp('Computing surface albedo and normal map...')
-[albedo, normals] = estimate_alb_nrm(image_stack, scriptV);
+[albedo, normals] = estimate_alb_nrm(image_stack, scriptV,false);
 
 %% integrability check: is (dp / dy  -  dq / dx) ^ 2 small everywhere?
 disp('Integrability checking')

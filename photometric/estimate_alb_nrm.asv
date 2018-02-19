@@ -8,7 +8,6 @@ function [ albedo, normal ] = estimate_alb_nrm( image_stack, scriptV, shadow_tri
 %   	linear equations
 %   albedo : the surface albedo
 %   normal : the surface normal
-
 [h, w, r] = size(image_stack);
 
 
@@ -29,13 +28,10 @@ for i =1:h
         for p=1:r
             I(p,p)=arr(p,1);
         end
-        I1=arr;
-        scrip=scriptV;
-        if shadow_trick==true
-            I1=I*arr;
-            scrip=I*scriptV;
-        end
-        tem=linsolve(scrip,I1);
+        if shadow_trick
+        I1=I*arr;
+        scrip=I*scriptV;
+        tem=linsolve(scriptV,arr);
         le=length(tem);
         for p=1:le
             g(i,j,p)=tem(p);
