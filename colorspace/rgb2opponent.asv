@@ -1,0 +1,9 @@
+function [output_image] = rgb2opponent(input_image)
+% converts an RGB image into opponent color space
+output_image=zeros(384,512,3);
+for i=1:384
+    for j=1:512
+        o1=(input(i,j,1)
+
+end
+
