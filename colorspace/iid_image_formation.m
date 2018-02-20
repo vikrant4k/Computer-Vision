@@ -1,0 +1,15 @@
+real_image = imread('D:\subj\cv1\Lab1_Photometric_Color\Lab1_Photometric_Color\intrinsic_images\ball.png');
+reflectance=imread('D:\subj\cv1\Lab1_Photometric_Color\Lab1_Photometric_Color\intrinsic_images\ball_reflectance.png');
+shading=imread('D:\subj\cv1\Lab1_Photometric_Color\Lab1_Photometric_Color\intrinsic_images\ball_shading.png');
+reflectance=im2double(reflectance);
+shading=im2double(shading);
+real_image=im2double(real_image);
+o1=reflectance.*shading;
+subplot(1,4,1);
+imshow(reflectance);
+subplot(1,4,2);
+imshow(shading);
+subplot(1,4,3);
+imshow(o1);
+subplot(1,4,4);
+imshow(real_image);
