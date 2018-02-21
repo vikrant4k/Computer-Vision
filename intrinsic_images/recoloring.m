@@ -1,32 +1,33 @@
-real_image = imread('ball.png');
-reflectance=imread('ball_reflectance.png');
-shading=imread('ball_shading.png');
-green_reflec=repmat(reflectance,1);
-mage_reflec=repmat(reflectance,1);
-r=0;
-g=0;
-b=0;
-for i=1:266
-    for j=1:480
-        if reflectance(i,j,1)>0 
-             green_reflec(i,j,1)=reflectance(i,j,1)-20;
-             green_reflec(i,j,2)=reflectance(i,j,2)+60;
-             green_reflec(i,j,3)=reflectance(i,j,3);
-             mage_reflec(i,j,1)=reflectance(i,j,1)+20;
-             mage_reflec(i,j,2)=reflectance(i,j,2)-20;
-             mage_reflec(i,j,3)=reflectance(i,j,3)+20;
-        end
-    end
-end
-shading=im2double(shading);
-real_image=im2double(real_image);
-green_reflec=im2double(green_reflec);
-mage_reflec=im2double(mage_reflec);
-o1=green_reflec.*shading;
-o2=mage_reflec.*shading;
+clear
+clc
+close all
+ref_img = im2double(imread('ball_reflectance.png'));
+shade_img = im2double(imread('ball_shading.png'));
+orig_img = im2double(imread('ball.png'));
+
+
+[x_s, y_s, c_s] = size(ref_img);
+new_ref = zeros(x_s, y_s, c_s);
+
+new_ref(:,:,1) = 0;
+new_ref(:,:,2) = 1;
+new_ref(:,:,3) = 0;
+
+
+%rec_img = ref_img .* shade_img;
+rec_img = new_ref .* shade_img;
+figure
 subplot(1,3,1);
-imshow(real_image);
+imshow(orig_img)
 subplot(1,3,2);
-imshow(o1);
+imshow(rec_img)
+
+new_ref(:,:,1) = 1;
+new_ref(:,:,2) = 0;
+new_ref(:,:,3) = 1;
+
+
+%rec_img = ref_img .* shade_img;
+rec_img = new_ref .* shade_img;
 subplot(1,3,3);
-imshow(o2);
+imshow(rec_img)
