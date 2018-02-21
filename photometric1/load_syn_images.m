@@ -9,9 +9,6 @@ function [ image_stack, scriptV ] = load_syn_images( image_dir, channel )
 files = dir(fullfile(image_dir, '*.png'));
 nfiles = length(files);
 
-if nargin == 1
-    channel = 1;
-end
 
 image_stack = 0;
 V = 0;

@@ -4,7 +4,8 @@ function show_model(albedo, height_map)
 %   height_map: height in z direction, describing the model geometry
 % Spring 2014 CS 543 Assignment 1
 % Arun Mallya and Svetlana Lazebnik
-
+%[albedo,map] = rgb2ind(albedo,32);
+%cmap = map;
 
 % some cosmetic transformations to make 3D model look better
 [hgt, wid] = size(height_map);
@@ -21,6 +22,7 @@ zlabel('Y')
 title('Height Map')
 view(-60,20)
 colormap(gray)
+%colormap(cmap)
 set(gca, 'XDir', 'reverse')
 set(gca, 'XTick', []);
 set(gca, 'YTick', []);
