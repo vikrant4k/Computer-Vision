@@ -1,4 +1,5 @@
 function [ imOut ] = denoise( image, kernel_type, varargin)
+imOut=0;
 switch kernel_type
     case 'box'
         imOut = imboxfilt(image,varargin{1});
@@ -8,7 +9,6 @@ switch kernel_type
         imOut=zeros(size(image));
         g=gauss2D(varargin{1},varargin{2});
         diff=floor(varargin{2}/2);
-        diff
         [h w]=size(image);
         for i=1+diff:(h-diff)
             for j=1+diff:(w-diff)
