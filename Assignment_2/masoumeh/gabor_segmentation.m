@@ -195,7 +195,7 @@ if smoothingFlag
         % ii) insert the smoothed image into features(:,:,jj)
     %END_FOR
     for jj = 1:length(featureMags)
-        features(:,:,jj) = imgaussfilt(featureMags{jj});
+        features(:,:,jj) = imgaussfilt(featureMags{jj}, 2);
     end    
 else
     % Don't smooth but just insert magnitude images into the matrix
@@ -220,7 +220,7 @@ features = reshape(features, numRows * numCols, []);
 
 %features = features;
 disp(size(features))
-features =  bsxfun(@times,bsxfun(@minus,features,mean(features,2)), 1./std(features,[],2));
+features =  bsxfun(@times,bsxfun(@minus,features,mean(features,1)), 1./std(features,[],1));
 % %zscore(features)
         
         % \\ TODO: i)  Implement standardization on matrix called features. 
