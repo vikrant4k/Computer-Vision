@@ -1,7 +1,23 @@
+%% make directory to save outputs:
+if exist('output/segmentOutput','dir') ~= 7
+    mkdir 'output/segmentOutput'
+end
+if exist('output/gaborEffect','dir') ~= 7
+    mkdir 'output/gaborEffect'
+end 
+if exist('output/gaborFilter','dir') ~= 7
+    mkdir 'output/gaborFilter'
+end 
+if exist('output/featureMaps','dir') ~= 7
+    mkdir 'output/featureMaps'
+end 
+
+
+
 %% Hyperparameters
 k        = 2;      % number of clusters in k-means algorithm. By default, 
                    % we consider k to be 2 in foreground-background segmentation task.
-image_id = 'Kobi'; % Identifier to switch between input images.
+image_id = 'Robin-2'; % Identifier to switch between input images.
                    % Possible ids: 'Kobi',    'Polar', 'Robin-1'
                    %               'Robin-2', 'Cows'
 
@@ -9,7 +25,7 @@ image_id = 'Kobi'; % Identifier to switch between input images.
 err_msg  = 'Image not available.';
 
 % Control settings
-visFlag       = false;    %  Set to true to visualize filter responses.
+visFlag       = true;%false;    %  Set to true to visualize filter responses.
 smoothingFlag = true;   %  Set to true to postprocess filter outputs.
 
 %% Read image
@@ -75,7 +91,7 @@ orientations = 0:dTheta:(pi/2);
 
 % Define the set of sigmas for the Gaussian envelope. Sigma here defines 
 % the standard deviation, or the spread of the Gaussian. 
-sigmas = [1,2]; 
+sigmas = [1,2,4]; 
 
 % Now you can create the filterbank. We provide you with a MATLAB struct
 % called gaborFilterBank in which we will hold the filters and their
@@ -136,23 +152,37 @@ fprintf('--------------------------------------\n')
 %            explain what works better and why shortly in the report.
 featureMaps = cell(length(gaborFilterBank),1);
 for jj = 1 : length(gaborFilterBank)
+    real_filter =  gaborFilterBank(jj).filterPairs(:,:,1);%imfilter(img_gray,gaborFilterBank(jj).filterPairs(:,:,1));% \\TODO: filter the grayscale input with real part of the Gabor
+    imag_filter =  gaborFilterBank(jj).filterPairs(:,:,2);%imfilter(img_gray,gaborFilterBank(jj).filterPairs(:,:,2));% \\TODO: filter the grayscale input with imaginary part of the Gabor    
     real_out =  imfilter(img_gray,gaborFilterBank(jj).filterPairs(:,:,1));% \\TODO: filter the grayscale input with real part of the Gabor
     imag_out =  imfilter(img_gray,gaborFilterBank(jj).filterPairs(:,:,2));% \\TODO: filter the grayscale input with imaginary part of the Gabor
     featureMaps{jj} = cat(3, real_out, imag_out);
     
     % Visualize the filter responses if you wish.
-    %visFlag = 1
+    %visFlag = 0
     if visFlag
-        figure(2),
-        subplot(121), imshow(real_out), title(sprintf('Re[h(x,y)], \\lambda = %f, \\theta = %f, \\sigma = %f',gaborFilterBank(jj).lambda,...
+        figure(7),
+        subplot(121), imshow(real_filter), title(sprintf('Re[h(x,y)], \\lambda = %f,\n \\theta = %f,\n \\sigma = %f',gaborFilterBank(jj).lambda,...
                                                                                                               gaborFilterBank(jj).theta,...
                                                                                                               gaborFilterBank(jj).sigma));
-        subplot(122), imshow(imag_out), title(sprintf('Im[h(x,y)], \\lambda = %f, \\theta = %f, \\sigma = %f',gaborFilterBank(jj).lambda,...
+        subplot(122), imshow(imag_filter), title(sprintf('Im[h(x,y)], \\lambda = %f,\n \\theta = %f,\n \\sigma = %f',gaborFilterBank(jj).lambda,...
+                                                                                                              gaborFilterBank(jj).theta,...
+                                                                                                              gaborFilterBank(jj).sigma));
+    saveas(figure(7),['output/gaborFilter/Gabor_affect_onDomain_'  image_id '_' num2str(jj) '.png']);                                                                                                           
+    pause(0.1)
+    end    
+    
+    if visFlag
+        figure(2),
+        subplot(121), imshow(real_out), title(sprintf('Re[h(x,y)], \\lambda = %f,\n \\theta = %f,\n \\sigma = %f',gaborFilterBank(jj).lambda,...
+                                                                                                              gaborFilterBank(jj).theta,...
+                                                                                                              gaborFilterBank(jj).sigma));
+        subplot(122), imshow(imag_out), title(sprintf('Im[h(x,y)], \\lambda = %f,\n \\theta = %f,\n \\sigma = %f',gaborFilterBank(jj).lambda,...
                                                                                                               gaborFilterBank(jj).theta,...
                                                                                                               gaborFilterBank(jj).sigma));
         
-    %saveas(figure(2),['Gabor_affect_onDomain_' num2str(jj) '.png']);                                                                                                       
-    pause(1)
+    saveas(figure(2),['output/gaborEffect/GaborOnGrayScale_'  image_id '_' num2str(jj) '.png']);                                                                                                       
+    pause(0.1)
     end
 end
 
@@ -167,12 +197,14 @@ for jj = 1:length(featureMaps)
     featureMags{jj} = sqrt(((real_part .^2) + (imag_part .^ 2)));% \\TODO: Compute the magnitude here
     
     % Visualize the magnitude response if you wish.
+    %visFlag = 1
     if visFlag
         figure(3), 
         imshow(uint8(featureMags{jj})), title(sprintf('Re[h(x,y)], \\lambda = %f, \\theta = %f, \\sigma = %f',gaborFilterBank(jj).lambda,...
                                                                                                               gaborFilterBank(jj).theta,...
                                                                                                               gaborFilterBank(jj).sigma));
-        pause(.3)    
+        saveas(figure(3),['output/featureMaps/gaborOnGrayImage_' image_id '_' num2str(jj) '.png']);                                                                                                          
+        pause(0.1)    
     end
 end
 
@@ -195,7 +227,8 @@ if smoothingFlag
         % ii) insert the smoothed image into features(:,:,jj)
     %END_FOR
     for jj = 1:length(featureMags)
-        features(:,:,jj) = imgaussfilt(featureMags{jj}, 2);
+        smoothing_sigma = 5
+        features(:,:,jj) = imgaussfilt(featureMags{jj}, smoothing_sigma);
     end    
 else
     % Don't smooth but just insert magnitude images into the matrix
@@ -234,7 +267,7 @@ coeff = pca(features);
 feature2DImage = reshape(features*coeff(:,1),numRows,numCols);
 figure(4)
 imshow(feature2DImage,[]), title('Pixel representation projected onto first PC')
-
+saveas(figure(4),['output/segmentOutput/PixelRepresentation_' image_id '_' num2str(smoothing_sigma) '.png']);
 
 % Apply k-means algorithm to cluster pixels using the data matrix,
 % features. 
@@ -254,7 +287,7 @@ pixLabels = reshape(pixLabels,[numRows numCols]);
 
 figure(5)
 imshow(label2rgb(pixLabels)), title('Pixel clusters');
-
+saveas(figure(5),['output/segmentOutput/PixelClusters_' image_id '_' num2str(smoothing_sigma) '.png']);
 
 
 % Use the pixLabels to visualize segmentation.
@@ -266,6 +299,6 @@ Aseg1(BW) = img(BW);
 Aseg2(~BW) = img(~BW);
 figure(6)
 imshowpair(Aseg1,Aseg2,'montage')
-
+saveas(figure(6),['output/segmentOutput/montage_' image_id '_' num2str(smoothing_sigma) '.png']);
 
 
