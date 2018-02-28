@@ -21,7 +21,7 @@ switch LOG_type
     case 3
         %method 3
        lap=gauss2D(0.5,5);
-       lap_1=gauss2D(3,5);
+       lap_1=gauss2D(1,5);
        lap_1=lap_1-lap;
        surf(lap_1);
        imOut=conv2(image,lap_1,'same');
