@@ -1,4 +1,7 @@
 function[u,v]=lucase_kanade(im1,im2,window_size)
+h=fspecial('gaussian',5,0.5);
+im1=conv2(im1,h,'same');
+im2=conv2(im2,h,'same');
 [gx1,gy1]=gradient(im1);
 gt=im1-im2;
 [h,w]=size(im1);
