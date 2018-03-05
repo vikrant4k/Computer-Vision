@@ -1,4 +1,5 @@
-img=imread('person_toy\00000001.jpg');
+%img=imread('pingpong/0000.jpeg');
+img = imread('person_toy/00000001.jpg');
 % To rotate the image
 %img=imrotate(img,10);
 img_gray=rgb2gray(img);
