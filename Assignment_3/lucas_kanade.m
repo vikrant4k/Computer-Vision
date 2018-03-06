@@ -13,8 +13,8 @@ for i=1:window_size:h
         A=double(zeros(window_size,2));
         b=double(zeros(window_size,1));
         counter=1;
-        for k=i:min(i+window_size,h)
-            for l=j:min(j+window_size,w)
+        for k=i:min(i+window_size-1,h)
+            for l=j:min(j+window_size-1,w)
                 A(counter,1)=gx1(k,l);
                 A(counter,2)=gy1(k,l);
                 b(counter,1)=gt(k,l);
@@ -32,7 +32,6 @@ for i=1:window_size:h
 end
 u(isnan(u))=0;
 v(isnan(v))=0;
-count
 end
 
 

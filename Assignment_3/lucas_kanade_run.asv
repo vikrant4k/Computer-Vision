@@ -1,0 +1,19 @@
+im11=imread('sphere1.ppm');
+im22=imread('sphere2.ppm');
+im1=rgb2gray(im11);
+im2=rgb2gray(im22);
+im1=im2double(im1);
+im2=im2double(im2);
+[u,v]=lucas_kanade(im1,im2,15);
+imshow(im11);
+hold on;
+x=zeros(13,13);
+y=zeros(13,13);
+u1=double(zeros(13,13));
+v1=double(zeros(13,13));
+[h,w]=size(u);
+for i=1:h
+    for j=1:w
+        if(u(i,j)~=0 || v(i,j)~=0)
+            
+quiver(u,v,'red')
