@@ -1,21 +1,43 @@
+clear all;
+close all; 
+clc;
+%----------------------------load images---------------------
+%original_image = imread('../synth1.pgm');
+%moved_image = imread('../synth2.pgm');
 
-%function[]= lucas_kanade()
-%img_1 = imread('../synth1.pgm');%rgb2gray(imread('../synth2.pgm'));
-%img_2 = imread('../synth2.pgm');
-
-img_1 = im2double(rgb2gray(imread('../sphere1.ppm')));%rgb2gray(imread('../synth2.pgm'));
-img_2 = im2double(rgb2gray(imread('../sphere2.ppm')));
+original_image = imread('../sphere1.ppm');
+moved_image = imread('../sphere2.ppm');
 
 
-Gx = gradient(fspecial('gauss', [1, 3]));
-Gy = gradient(fspecial('gauss', [3, 1]));
-%Ix = conv2(img_2,Gx,'same');
-%Iy = conv2(img_2,Gy,'same');
-Ix = imfilter(img_2, Gx);
-Iy = imfilter(img_2, Gy);
+size(original_image)
+size(moved_image)
 
+%------convert colored image to gray scale---covert gray to double--------
+if length(size(original_image)) == 3
+    img_1 = im2double(rgb2gray(original_image));
+else
+    img_1 = im2double(original_image);
+end
+    
+if length(size(moved_image)) == 3
+    img_2 = im2double(rgb2gray(moved_image));
+else
+    img_2 = im2double(moved_image);
+end
+
+
+%--------------Calculate Ix and Iy for whole image---------------------
+sigma = 1.5;
+filter_size = 3;
+Gx = gradient(fspecial('gauss', [1, filter_size], sigma));
+Gy = gradient(fspecial('gauss', [filter_size, 1], sigma));
+Ix = imfilter(img_1, Gx,'conv');
+Iy = imfilter(img_1, Gy,'conv');
+
+
+%-----------slice both images to 15*15 patches------------------
 slice_size = 15;
-[h w] = size(img_1);
+[h, w] = size(img_1);
 patch_num = floor(w/slice_size) * floor(h/slice_size);
 patches_1 = zeros(patch_num, 15,15);
 patches_2 = zeros(patch_num, 15,15);
@@ -33,32 +55,36 @@ for i = 1:floor(h/slice_size)
 end
 
 
-%figure(1)
-%imshow(img)
-sigma = 1.5;
-filter_size = 3;
+
+%-----Find velocity between every two matching patches from two images-----
 u = zeros(patch_num,1);
 v = zeros(patch_num,1);
 c = 1;
-num_of_patches
-for i = 1:num_of_patches
+
+for i = 1:patch_num
     patch_of_1 = reshape(patches_1(i,:,:), slice_size, slice_size);
     patch_of_2 = reshape(patches_2(i,:,:), slice_size, slice_size);
     patch_Ix = reshape(patches_ix(i, :, :), slice_size, slice_size);
     patch_Iy = reshape(patches_iy(i, :, :), slice_size, slice_size);
-    x = lucas_kanade(patch_of_1,patch_of_2, patch_Ix, patch_Iy, sigma , filter_size);
-    u(c,1) = x(1);
-    v(c,1) = x(2);
+    solution = lucas_kanade(patch_of_1,patch_of_2, patch_Ix, patch_Iy);
+    u(c,1) = solution(1);
+    v(c,1) = solution(2);
     c = c + 1;
 end
-u = reshape(u, 13, 13)
-v = reshape(v, 13, 13)
+
+
+%--------------- Plot velocity vectors on original image-----------------
+p_x = floor(w/slice_size);
+p_y = floor(h/slice_size);
+u = reshape(u, p_x, p_y);
+v = reshape(v, p_x, p_y);
+
 m = floor(slice_size/2)+1;
 [x,y] = meshgrid(m:slice_size:w-m,m:slice_size:h-m);
+
+
 figure(1);
-imshow(img_1);  
+imshow(original_image);  
 hold on;
 quiver(y, x , u, v, 'red')
-
-
 
