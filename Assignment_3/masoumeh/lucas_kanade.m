@@ -7,7 +7,7 @@ function[velocity]= lucas_kanade(patch_1, patch_2, Ix, Iy)
     
     A = [Ix, Iy];
     
-    It = patch_2 - patch_1;
+    It = patch_1 - patch_2;
     [It_h, It_w] = size(It);
     b = -1 * (reshape(It,It_h * It_w,1));
     velocity = pinv(A)*b;

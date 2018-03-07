@@ -78,7 +78,7 @@ p_x = floor(w/slice_size);
 p_y = floor(h/slice_size);
 u = reshape(u, p_x, p_y);
 v = reshape(v, p_x, p_y);
-
+size(u)
 m = floor(slice_size/2)+1;
 [x,y] = meshgrid(m:slice_size:w-m,m:slice_size:h-m);
 
