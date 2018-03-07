@@ -3,7 +3,7 @@ img = imread('person_toy/00000001.jpg');
 % To rotate the image
 %img=imrotate(img,10);
 img_gray=rgb2gray(img);
-%img=im2double(img);
+%img=im2double(img_gray);
 [H,img_x,img_y]=harris_corner_detector(img_gray,1.5,5,1,5);
 H_new=harris_local_maxima(H,70,20);
 subplot(1,3,1);
