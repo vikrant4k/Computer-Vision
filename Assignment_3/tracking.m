@@ -1,37 +1,10 @@
 %img=imread('pingpong/0000.jpeg');
-for l=99:103
 pre='person_toy/0000000';
 pre1='person_toy/000000';
 pre2='person_toy/00000';
 pst='.jpg';
-if(l<=8)
-img1 = imread(strcat(pre,num2str(l),pst));
-img=imread(strcat(pre,num2str(l),pst));
-img2 = imread(strcat(pre,num2str(l+1),pst));
-end
-if(l==9)
-img1 = imread(strcat(pre,num2str(l),pst));
-img=imread(strcat(pre,num2str(l),pst));
-img2 = imread(strcat(pre1,num2str(l+1),pst));
-end
-if(l>=10 && l<=98)
-img1 = imread(strcat(pre1,num2str(l),pst));
-img=imread(strcat(pre1,num2str(l),pst));
-img2 = imread(strcat(pre1,num2str(l+1),pst));
-end
-if(l>=99)
-if(l==99)
-img1 = imread(strcat(pre1,num2str(l),pst));
-img=imread(strcat(pre1,num2str(l),pst));
-else
-img1 = imread(strcat(pre2,num2str(l),pst));
-img=imread(strcat(pre2,num2str(l),pst));
-end
-img2 = imread(strcat(pre2,num2str(l+1),pst));
-end
-%img = imread('person_toy/00000001.jpg');
+img=imread(strcat(pre,num2str(1),pst));
 img_gray=rgb2gray(img);
-%img=im2double(img);
 [H,~,~]=harris_corner_detector(img_gray,1.5,5,1,5);
 H_new=harris_local_maxima(H,70,600);
 [h w]=size(H);
@@ -49,14 +22,40 @@ for i=1:h
         end
     end
 end
+for l=1:20
+if(l<=8)
+img1 = imread(strcat(pre,num2str(l),pst));
+img2 = imread(strcat(pre,num2str(l+1),pst));
+end
+if(l==9)
+img1 = imread(strcat(pre,num2str(l),pst));
+img2 = imread(strcat(pre1,num2str(l+1),pst));
+end
+if(l>=10 && l<=98)
+img1 = imread(strcat(pre1,num2str(l),pst));
+img2 = imread(strcat(pre1,num2str(l+1),pst));
+end
+if(l>=99)
+if(l==99)
+img1 = imread(strcat(pre1,num2str(l),pst));
+else
+img1 = imread(strcat(pre2,num2str(l),pst));
+end
+img2 = imread(strcat(pre2,num2str(l+1),pst));
+end
+
 im1=rgb2gray(img1);
 im2=rgb2gray(img2);
 im1=im2double(im1);
 im2=im2double(im2);
-[u,v]=lucas_kanade_motion(im1,im2,15,arr);
-imshow(img);
+[u,v,arr_new]=lucas_kanade_motion(im1,im2,15,arr);
+C = setdiff(arr_new,arr);
+size(C)
+arr=arr_new;
+imshow(img1);
+
 hold on;            
 quiver(u,v,10,'blue')
 saveas(gcf,strcat('vid/',num2str(l),'.png'));
-clearvars  -except l
+% clearvars  -except l
 end
