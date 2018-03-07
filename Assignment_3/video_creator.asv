@@ -1,8 +1,10 @@
-outputVideo = VideoWriter(fullfile('vid/','toy_vid_out.avi'));
+%outputVideo = VideoWriter(fullfile('vid/','toy_vid_out.avi'));
 %outputVideo.FrameRate = shuttleVideo.FrameRate;
-open(outputVideo);
+%open(outputVideo);
 for i = 1:103
    img = imread(strcat('vid/',num2str(i),'.png'));
-   writeVideo(outputVideo,img)
+   img=resize(img,[1033,1431,3]);
+   size(img)
+   %writeVideo(outputVideo,img)
 end
-close(outputVideo)
+%close(outputVideo)

@@ -3,7 +3,7 @@ outputVideo = VideoWriter(fullfile('vid/','toy_vid_out.avi'));
 open(outputVideo);
 for i = 1:103
    img = imread(strcat('vid/',num2str(i),'.png'));
+   img=imresize(img,[1033,1431]);
    writeVideo(outputVideo,img)
 end
-1
 close(outputVideo)
