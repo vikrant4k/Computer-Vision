@@ -6,7 +6,7 @@ pst='.jpg';
 img=imread(strcat(pre,num2str(1),pst));
 img_gray=rgb2gray(img);
 [H,~,~]=harris_corner_detector(img_gray,1.5,5,1,5);
-H_new=harris_local_maxima(H,70,600);
+H_new=harris_local_maxima(H,30,70);
 [h w]=size(H);
 arr=zeros(40,2);
 arr_count=1;
@@ -22,7 +22,7 @@ for i=1:h
         end
     end
 end
-for l=1:20
+for l=1:2
 if(l<=8)
 img1 = imread(strcat(pre,num2str(l),pst));
 img2 = imread(strcat(pre,num2str(l+1),pst));
@@ -53,7 +53,6 @@ C = setdiff(arr_new,arr);
 size(C)
 arr=arr_new;
 imshow(img1);
-
 hold on;            
 quiver(u,v,10,'blue')
 saveas(gcf,strcat('vid/',num2str(l),'.png'));

@@ -2,14 +2,14 @@ function[H_new]=harris_local_maxima(H,siz,threshold)
 size(H)
 [h,w]=size(H);
 H_new=double(zeros(size(H)));
-for i=1:h
-    for j=1:w
+for i=1:siz:h
+    for j=1:siz:w
         max=H(i,j);
         x=i;
         y=j;
-        if((i+siz)<=h && (j+siz)<=w)
-        for k=i:i+siz
-            for l=j:j+siz
+       
+        for k=i:min(i+siz,h)
+            for l=j:min(j+siz,w)
                 if (H(k,l)>max)
                     max=H(k,l);
                     x=k;
@@ -20,9 +20,7 @@ for i=1:h
         if(max>threshold)
         H_new(x,y)=max;
         end
-        end
-        j=j+siz;
+        
     end
-    i=i+siz;
 end
 end 

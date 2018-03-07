@@ -22,7 +22,7 @@ for i=1:window_size:h
               
             end
         end
-        temp=pinv(A)*b;%inv(transpose(A)*A)*transpose(A)*b;
+        temp=inv(transpose(A)*A)*transpose(A)*b;
         u(i,j)=temp(1,1);
         v(i,j)=temp(2,1);
         count=count+1; 

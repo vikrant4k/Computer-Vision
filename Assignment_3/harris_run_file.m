@@ -5,14 +5,15 @@ img = imread('person_toy/00000001.jpg');
 img_gray=rgb2gray(img);
 %img=im2double(img_gray);
 [H,img_x,img_y]=harris_corner_detector(img_gray,1.5,5,1,5);
-H_new=harris_local_maxima(H,70,20);
-subplot(1,3,1);
-imshow(img_x);
-title('Derivative x-axis');
-subplot(1,3,2);
-imshow(img_y);
-title('Derivative y-axis');
-subplot(1,3,3);
+H_new=harris_local_maxima(H,30,70);
+
+% subplot(1,3,1);
+% imshow(img_x);
+% title('Derivative x-axis');
+% subplot(1,3,2);
+% imshow(img_y);
+% title('Derivative y-axis');
+% subplot(1,3,3);
 [h w]=size(H);
 for i=1:h
     for j=1:w
@@ -24,4 +25,4 @@ for i=1:h
     end
 end
 imshow(img);
-title('Corners on image');
+% title('Corners on image');
