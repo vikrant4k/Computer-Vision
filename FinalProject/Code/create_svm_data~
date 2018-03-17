@@ -1,3 +1,0 @@
-function[file_name]=create_svm_data()
-
-end
