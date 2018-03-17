@@ -10,7 +10,7 @@ clc;
 %Histogram Creation for Images%
 %% 
 
-numClusters=1200;
+numClusters=600;
 arr_dim=reshape(arr_dim,128,154130);
 [centers, assignments] = vl_kmeans(arr_dim, numClusters, 'Initialization', 'plusplus') ;
 
@@ -26,3 +26,12 @@ for i=1:img_count-1
     assig_count=assig_count+desc_count;
 end
 %% 
+%img_hist_data=gather(img_hist_data);
+x_axis=zeros(numClusters,1);
+y_axis=zeros(numClusters,1);
+for i=1:numClusters
+    x_axis(i,1)=i;
+    y_axis(i,1)=img_hist_data(190,i);
+end
+%scatter(x_axis,y_axis)
+%histogram(y_axis,1200)
