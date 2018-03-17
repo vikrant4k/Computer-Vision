@@ -35,3 +35,6 @@ for i=1:numClusters
 end
 %scatter(x_axis,y_axis)
 %histogram(y_axis,1200)
+%% 
+image_hist_train_data=create_train_data(101,numClusters,centers);
+

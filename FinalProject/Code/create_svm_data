@@ -1,0 +1,31 @@
+function[file_name]=create_svm_data(inital_index)
+file_name='blabla';
+folders={'airplanes_train/','cars_train/','faces_train/','motorbikes_train/'};
+    max_files=50;
+    num_folders=4;
+    pre_index='../Caltech4/ImageData/';
+    file_type='.jpg';
+    img_index='00';
+    img_index_1='0';
+    counter=1;
+    arr_dim=double(zeros(max_files*num_folders*374,128));
+    arr_counter=zeros(max_files*num_folders,1);
+    img_count=1;
+    for i=1:4
+        for j=initial_index:initial_index+max_files
+            
+           
+endimage_name='img';
+            if(j>0 && j<10)
+                image_name=strcat(image_name,img_index,num2str(j));
+            else
+                if(j>=10 && j<100)
+                     image_name=strcat(image_name,img_index_1,num2str(j));
+                else
+                     image_name=strcat(image_name,num2str(j));
+                end
+            end
+            val=string(folders(i));
+            image_name=strcat(pre_index,val,image_name,file_type);
+            image_name=convertStringsToChars(image_name);
+            im=imread(image_name);

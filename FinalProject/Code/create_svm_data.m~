@@ -1,0 +1,3 @@
+function[file_name]=create_svm_data(image_hist_data,num_files,)
+
+end
