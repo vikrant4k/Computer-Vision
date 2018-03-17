@@ -2,30 +2,24 @@ clear all;
 close all; 
 clc;
 
-% { 'cars_train', 'airplanes_train', 'motorbikes_train', 'faces_train'}
-folders_names = ['cars_train/', 'airplanes_train/', 'motorbikes_train/', 'faces_train/'];
-path = '../Caltech4/ImageData/';
-for i=1:length(folders_names)
-    %fileID = fopen('min_da_size_info.txt','w');
-    [min_key_points, min_da_size] = find_min_da_size(strcat(path,folders_names))
-    %fprintf(fileID,min_key_points, min_da_size,'\n');
-    %fclose(fileID);
+
+
+arr_dim = read_files();
+numClusters=400;
+arr_dim=reshape(arr_dim,128,1280000);
+[centers, assignments] = vl_kmeans(arr_dim, numClusters, 'Initialization', 'plusplus') ;
+
+
+%Histogram Creation for Images%
+
+%% 
+img_hist_data=double(zeros(1600,numClusters));
+le=size(assignments,2);
+counter=1;
+for i=1:le
+    if(mod(i,800)==0)
+        counter=counter+1
+    end
+    val=assignments(1,i);
+    img_hist_data(counter,val)=img_hist_data(counter,val)+1;
 end
-
-
-
-
-%% Feature extraction
-
-%Ia = imread('../Caltech4/ImageData/cars_train/img001.jpg') ;
-%[fa, da] = feature_extraction(Ia);
-%size(da)
-%size(fa)
-
-
-
-
-
-
-
-

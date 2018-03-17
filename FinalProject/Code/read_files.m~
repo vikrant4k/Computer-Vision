@@ -1,12 +1,12 @@
 function [arr_dim] =read_files()
     folders={'airplanes_train/','cars_train/','faces_train/','motorbikes_train/'};
-    max_files=400;
+    max_files=500;
     pre_index='../Caltech4/ImageData/';
     file_type='.jpg';
     img_index='00';
     img_index_1='0';
     counter=1;
-    arr_dim=double(zeros(1280000,128));
+    arr_dim=double(zeros(640000,128));
     for i=1:4
         for j=1:max_files
             image_name='img';
