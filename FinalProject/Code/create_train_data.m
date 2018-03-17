@@ -1,6 +1,11 @@
-function[image_hist_train_data]=create_train_data(initial_index,numClusters,centers)
-folders={'airplanes_train/','cars_train/','faces_train/','motorbikes_train/'};
-    max_files=50;
+function[image_hist_train_data]=create_train_data(initial_index,numClusters,centers,max_files,env_type)
+folders_train={'airplanes_train/','cars_train/','faces_train/','motorbikes_train/'};
+folders_test={'airplanes_test/','cars_test/','faces_test/','motorbikes_test/'};
+if(env_type=="train")
+    folders=folders_train;
+else
+    folders=folders_test;
+end
     num_folders=4;
     pre_index='../Caltech4/ImageData/';
     file_type='.jpg';

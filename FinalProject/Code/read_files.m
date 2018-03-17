@@ -1,12 +1,12 @@
 function [arr_dim,counter,arr_counter,img_count] =read_files()
     folders={'airplanes_train/','cars_train/','faces_train/','motorbikes_train/'};
-    max_files=100;
+    max_files=200;
     num_folders=4;
     pre_index='../Caltech4/ImageData/';
     file_type='.jpg';
     img_index='00';
     img_index_1='0';
-    counter=1;
+    counter=0;
     arr_dim=double(zeros(max_files*num_folders*374,128));
     arr_counter=zeros(max_files*num_folders,1);
     img_count=1;
