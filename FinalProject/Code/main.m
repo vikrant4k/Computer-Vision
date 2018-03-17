@@ -2,7 +2,7 @@ clear all;
 close all; 
 clc;
 
-
+%test branch
 
 [arr_dim,counter,arr_counter,img_count] = read_files();
 
