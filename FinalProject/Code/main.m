@@ -3,6 +3,8 @@ close all;
 clc;
 
 
+%% please read this:
+
 %for debuging i read from pre-saved file from preproccecing, to not run kmeans every time:
 % if you prefer to generate online use this:
 %[arr_dim,counter,arr_counter,img_count] =read_files();
@@ -17,6 +19,7 @@ img_count = data.img_count;
 toc;
 
 
+%% Kmeans
 numClusters=800;
 
 tic;
@@ -24,7 +27,7 @@ tic;
 toc;
 
 
-%%
+%% Histogram
 img_hist_data=double(zeros(100*4,numClusters));%,'gpuArray'));
 assig_count=1;
 for i=1:img_count-1

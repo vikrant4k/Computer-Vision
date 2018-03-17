@@ -24,6 +24,11 @@ function [arr_dim,counter,arr_counter,img_count] =read_files()
                 %size(da)
                 arr_dim = [arr_dim, double(da)];
                 arr_counter = [arr_counter;size(da,2)];
+                
+                
+                %%%%%%%% please read this:
+                %%%%%%%% this two are literaly one thing:
+                
                 counter = counter + 1; % why we need this?
                 img_count = img_count + 1; % why we need this?
                 
@@ -32,42 +37,4 @@ function [arr_dim,counter,arr_counter,img_count] =read_files()
     end
     
 
-
-    %{
-    file_type='.jpg';
-    img_index='00';
-    img_index_1='0';
-    
-    counter=1;
-    
-    length(folders)
-    arr_dim=[];%double(zeros(1280000,128));
-    
-    for i=1:length(folders)
-        for j=1:max_files
-            image_name='img';
-            if(j>0 && j<10)
-                image_name=strcat(image_name,img_index,num2str(j));
-            else
-                if(j>=10 && j<100)
-                     image_name=strcat(image_name,img_index_1,num2str(j));
-                else
-                     image_name=strcat(image_name,num2str(j));
-                end
-            end
-            val=string(folders(i));
-            image_name=strcat(pre_index,val,image_name,file_type);
-            image_name=convertStringsToChars(image_name);
-            im=imread(image_name);
-
-            [~, da] = feature_extraction(im);  
-            %size(double(da))
-            %size(da)
-            arr_dim = [arr_dim, double(da)];
-            %size(arr_dim)
-
-        end
-    end
-
-  %}
 end
