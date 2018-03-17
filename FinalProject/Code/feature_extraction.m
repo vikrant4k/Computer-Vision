@@ -1,5 +1,4 @@
 function [fa, da] = feature_extraction(Ia)
-
 if length(size(Ia)) == 3
     Ia1 =  im2single(rgb2gray(Ia));
 else

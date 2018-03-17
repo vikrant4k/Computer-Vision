@@ -1,14 +1,18 @@
-function [arr_dim] =read_files()
+function [arr_dim,counter,arr_counter,img_count] =read_files()
     folders={'airplanes_train/','cars_train/','faces_train/','motorbikes_train/'};
-    max_files=400;
+    max_files=100;
+    num_folders=4;
     pre_index='../Caltech4/ImageData/';
     file_type='.jpg';
     img_index='00';
     img_index_1='0';
     counter=1;
-    arr_dim=double(zeros(1280000,128));
+    arr_dim=double(zeros(max_files*num_folders*374,128));
+    arr_counter=zeros(max_files*num_folders,1);
+    img_count=1;
     for i=1:4
         for j=1:max_files
+            
             image_name='img';
             if(j>0 && j<10)
                 image_name=strcat(image_name,img_index,num2str(j));
@@ -23,10 +27,14 @@ function [arr_dim] =read_files()
             image_name=strcat(pre_index,val,image_name,file_type);
             image_name=convertStringsToChars(image_name);
             im=imread(image_name);
+            %im=gpuArray(im);
 
             [~, da] = feature_extraction(im);
             size_descrip=size(da,2);
             da=reshape(da,size_descrip,128);
+            
+            arr_counter(img_count,1)=size_descrip;
+            img_count=img_count+1;
             for k=1:size_descrip
                 counter=counter+1;
                 for o=1:128

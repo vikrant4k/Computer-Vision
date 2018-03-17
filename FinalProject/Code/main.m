@@ -4,22 +4,25 @@ clc;
 
 
 
-arr_dim = read_files();
-numClusters=800;
-arr_dim=reshape(arr_dim,128,1280000);
-[centers, assignments] = vl_kmeans(arr_dim, numClusters, 'Initialization', 'plusplus') ;
+[arr_dim,counter,arr_counter,img_count] = read_files();
 
 
 %Histogram Creation for Images%
+%% 
+
+numClusters=1200;
+arr_dim=reshape(arr_dim,128,154130);
+[centers, assignments] = vl_kmeans(arr_dim, numClusters, 'Initialization', 'plusplus') ;
 
 %% 
-img_hist_data=double(zeros(1600,numClusters));
-le=size(assignments,2);
-counter=1;
-for i=1:le-1
-    if(mod(i,800)==0)
-        counter=counter+1;
+img_hist_data=double(zeros(100*4,numClusters,'gpuArray'));
+assig_count=1;
+for i=1:img_count-1
+    desc_count=arr_counter(i,1);
+    for j=assig_count:assig_count+desc_count-1
+        val=assignments(1,j);
+        img_hist_data(i,val)=img_hist_data(i,val)+1;
     end
-    val=assignments(1,i);
-    img_hist_data(counter,val)=img_hist_data(counter,val)+1;
+    assig_count=assig_count+desc_count;
 end
+%% 
