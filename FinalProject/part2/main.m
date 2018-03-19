@@ -1,8 +1,11 @@
+
 %% main function 
 
 
-%% fine-tune cnn
 
+%% fine-tune cnn
+vl_setupnn
+1
 [net, info, expdir] = finetune_cnn();
 
 %% extract features and train svm
