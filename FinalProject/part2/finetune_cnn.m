@@ -1,9 +1,8 @@
 function [net, info, expdir] = finetune_cnn(varargin)
 
 %% Define options
-run(fullfile(fileparts(mfilename('fullpath')), ...
-  '..', '..', '..', 'matlab', 'vl_setupnn.m')) ;
 
+run( 'vl_setupnn.m') ;
 opts.modelType = 'lenet' ;
 [opts, varargin] = vl_argparse(opts, varargin) ;
 
@@ -70,6 +69,7 @@ end
 function [images, labels] = getSimpleNNBatch(imdb, batch)
 % -------------------------------------------------------------------------
 images = imdb.images.data(:,:,:,batch) ;
+imdb.images.labels=reshape(imdb.images.labels,1,2060);
 labels = imdb.images.labels(1,batch) ;
 if rand > 0.5, images=fliplr(images) ; end
 
@@ -84,6 +84,60 @@ splits = {'train', 'test'};
 
 %% TODO: Implement your loop here, to create the data structure described in the assignment
 
+data=double(zeros(32,32,3,1800));
+labels = [];
+sets = [] ;
+counter=0;
+
+test_files_path = '../Caltech4/ImageSets/test.txt';
+train_files_path = '../Caltech4/ImageSets/train.txt';
+files_base_path='../Caltech4/ImageData/'
+disp('now preparing the dataset...')
+
+train_adrs = strsplit(fileread(train_files_path),'\n');
+
+for i = 1:length(train_adrs)
+    sets = [sets; 1];
+    counter=counter+1;
+    im=imread(strcat(files_base_path,train_adrs{i},'.jpg'));
+    resize_im=imresize(im,[32 32]);
+    if(size(resize_im,3)==3)
+    data(:,:,:,counter)=resize_im;
+    if contains(train_adrs{i},'airplanes')
+        labels = [labels; 1];
+    elseif contains(train_adrs{i},'cars')
+        labels = [labels; 2];
+    elseif contains(train_adrs{i},'faces')
+        labels = [labels; 3];
+    elseif contains(train_adrs{i},'motorbikes')
+        labels = [labels; 4];
+    end
+    end
+end  
+
+test_adrs = strsplit(fileread(test_files_path),'\n');
+
+% shuffle:
+%test_info = test_info(randperm(numel(test_info)));
+
+for i = 1:length(test_adrs)
+    sets = [sets; 2];
+    counter=counter+1;
+    im=imread(strcat(files_base_path,test_adrs{i},'.jpg'));
+    resize_im=imresize(im,[32 32]);
+    if(size(resize_im,3)==3)
+    data(:,:,:,counter)=resize_im;
+    if contains(test_adrs{i},'airplanes')
+        labels = [labels; 1];
+    elseif contains(test_adrs{i},'cars')
+        labels = [labels; 2];
+    elseif contains(test_adrs{i},'faces')
+        labels = [labels; 3];
+    elseif contains(test_adrs{i},'motorbikes')
+        labels = [labels; 4];
+    end
+    end
+end  
 
 %%
 % subtract mean
@@ -100,5 +154,6 @@ perm = randperm(numel(imdb.images.labels));
 imdb.images.data = imdb.images.data(:,:,:, perm);
 imdb.images.labels = imdb.images.labels(perm);
 imdb.images.set = imdb.images.set(perm);
+size(imdb.images.data)
 
 end
