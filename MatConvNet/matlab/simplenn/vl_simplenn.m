@@ -1,5 +1,4 @@
 function res = vl_simplenn(net, x, dzdy, res, varargin)
-x=single(x);
 %VL_SIMPLENN  Evaluate a SimpleNN network.
 %   RES = VL_SIMPLENN(NET, X) evaluates the convnet NET on data X.
 %   RES = VL_SIMPLENN(NET, X, DZDY) evaluates the convnent NET and its
@@ -224,7 +223,7 @@ x=single(x);
 %
 % This file is part of the VLFeat library and is made available under
 % the terms of the BSD license (see the COPYING file).
-
+%x=single(x);
 opts.conserveMemory = false ;
 opts.sync = false ;
 opts.mode = 'normal' ;
@@ -235,7 +234,6 @@ opts.skipForward = false ;
 opts.parameterServer = [] ;
 opts.holdOn = false ;
 opts = vl_argparse(opts, varargin);
-
 n = numel(net.layers) ;
 assert(opts.backPropDepth > 0, 'Invalid `backPropDepth` value (!>0)');
 backPropLim = max(n - opts.backPropDepth + 1, 1);
